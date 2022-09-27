@@ -9,6 +9,10 @@ import Table from "./Table";
 import TableForm from "./TableForm";
 import ReactToPrint from "react-to-print";
 import ClientDetails from "./ClientDetails";
+import axios from "axios";
+
+const baseURL = "http://127.0.0.1:8088/invoice"
+
 
 function Invoice() {
   // const [name, setName] = useState("")
@@ -19,7 +23,7 @@ function Invoice() {
   // const [bankAccount, setBankAccount] = useState("")
   // const [website, setWebsite] = useState("")
   const [clientId, setClientName] = useState("");
-  const [clientAddress, setClientAddress] = useState("");
+  const [gross_cost, setGrossCost] = useState("");
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [invoiceDate, setInvoiceDate] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -30,13 +34,35 @@ function Invoice() {
   const [amount, setAmount] = useState("");
   const [list, setList] = useState([]);
   const [total, setTotal] = useState(0);
+  const [gst, setGst] = useState(0); //added
+  const [offer, setOffer] = useState(0);
   const [width] = useState(641);
+  
+
 
   const componentRef = useRef();
 
   const handlePrint = () => {
     window.print();
   };
+
+  async function createPost () {
+    let result = await axios.post(baseURL, {
+      invoice_id : invoiceNumber,
+      customer: clientId,
+      gross_cost: 0,
+      tax_amount: 0,
+      discount: offer,
+      net_amount:0,
+      payment_mode:"cash",
+      transction_id:11122,
+      invoice_date:invoiceDate,
+      total_amount:total, 
+    })
+    console.log(result)
+  }
+   
+
 
   useEffect(() => {
     if (window.innerWidth < width) {
@@ -51,7 +77,7 @@ function Invoice() {
       </div> */}
       <main className="container">
         <section>
-          <h2 className="text-primary">Customer Invoice</h2>
+          <h2 className="text-primary">Customer Invoice:</h2>
           <div className="bg-white p-5 rounded shadow ">
             {/* name, address, email, phone, bank name, bank account number, website client name, client address, invoice number, invoice date, due date, notes */}
             <div className="container">
@@ -156,12 +182,12 @@ function Invoice() {
 
               <article className="md:grid grid-cols-2 gap-10 md:mt-16">
                 <div className="flex flex-col">
-                  {/* <label htmlFor="invoiceNumber">Invoice Number</label> */}
+                  <label htmlFor="invoice_id">Invoice Number:</label>
                   <input
                     className="form-control"
-                    type="text"
-                    name="invoiceNumber"
-                    id="invoiceNumber"
+                    type="number"
+                    name="invoice_id"
+                    id="invoice_id"
                     placeholder="Invoice ID"
                     autoComplete="off"
                     value={invoiceNumber}
@@ -170,33 +196,29 @@ function Invoice() {
                 </div>
                 <br></br>
                 <div className="flex flex-col">
-                  {/* <label htmlFor="clientName">Enter your client's name</label> */}
+                  <label htmlFor="customer">Customer</label>
                   <input
                     className="form-control"
                     type="number"
-                    name="clientName"
-                    id="clientName"
+                    name="customer"
+                    id="customer"
                     placeholder="Customer ID"
                     autoComplete="off"
                     value={clientId}
                     onChange={(e) => setClientName(e.target.value)}
                   />
                 </div>
-                {/* <br></br> */}
+                <br></br>
                 <div className="flex flex-col">
-                  {/* <label htmlFor="clientAddress">
-                    Enter your client's address
-                  </label> */}
-                  {/* <input
+                  <label htmlFor="gross_cost">Gross Cost</label> 
+                  <input
                     className="form-control"
-                    type="text"
-                    name="clientAddress"
-                    id="clientAddress"
-                    placeholder="Enter your client's address"
-                    autoComplete="off"
-                    value={clientAddress}
-                    onChange={(e) => setClientAddress(e.target.value)}
-                  /> */}
+                    type="number"
+                    name="gross_cost"
+                    id="gross_cost"
+                    value={gross_cost}
+                    onChange={(e) => setGrossCost(e.target.value)}
+                  />
                 </div>
               </article>
               <br></br>
@@ -204,7 +226,7 @@ function Invoice() {
               <article className="md:grid grid-cols-3 gap-10">
                 {/* <br></br> */}
                 <div className="flex flex-col">
-                  <label htmlFor="invoiceDate">Invoice Date</label>
+                  <label htmlFor="invoiceDate">Invoice Date:</label>
                   <input
                     className="form-control"
                     type="date"
@@ -218,7 +240,7 @@ function Invoice() {
                 </div>
                 <br></br>
                 <div className="flex flex-col">
-                  <label htmlFor="dueDate">Due Date</label>
+                  <label htmlFor="dueDate">Due Date:</label>
                   <input
                     className="form-control"
                     type="date"
@@ -247,6 +269,12 @@ function Invoice() {
                   setList={setList}
                   total={total}
                   setTotal={setTotal}
+                    //added
+                  gst={gst}
+                  setGst={setGst}
+                  offer={offer}
+                  setOffer={setOffer}
+                   //added
                 />
               </article>
 
@@ -273,23 +301,26 @@ function Invoice() {
         <br></br>
 
         {/* Invoice Preview */}
+
         <div className="invoice__preview bg-white p-5 rounded">
           <ReactToPrint
             trigger={() => (
               <button className="btn btn-outline-primary">
                 Print / Download
               </button>
+               
+              
             )}
             content={() => componentRef.current}
           />
+          <button onClick={createPost}>SAVE</button> 
           <div ref={componentRef} className="p-5">
             <Header handlePrint={handlePrint} />
 
             <MainDetails />
 
             <ClientDetails
-              clientName={clientId}
-              clientAddress={clientAddress}
+              
             />
 
             <Dates

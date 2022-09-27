@@ -17,6 +17,10 @@ export default function TableForm({
   setList,
   total,
   setTotal,
+  gst,
+  setGst,
+  offer,
+  setOffer
 }) {
   const [isEditing, setIsEditing] = useState(false);
 
@@ -33,6 +37,8 @@ export default function TableForm({
         quantity,
         price,
         amount,
+        gst,
+        offer
       };
       setDescription("");
       setQuantity("");
@@ -46,11 +52,13 @@ export default function TableForm({
   // Calculate items amount function
   useEffect(() => {
     const calculateAmount = (amount) => {
-      setAmount(quantity * price);
+      let totalPrice = (((quantity * price)*(gst/100)+(quantity * price))-(quantity*price*(offer/100)));
+            
+      setAmount(totalPrice);
     };
 
     calculateAmount(amount);
-  }, [amount, price, quantity, setAmount]);
+  }, [amount, price, quantity, setAmount, gst, setGst, offer, setOffer]);
 
   // Calculate total amount of items in table
   useEffect(() => {
@@ -123,6 +131,28 @@ export default function TableForm({
             />
           </div>
           <br></br>
+            {/*added*/}
+            
+            <div className="flex flex-col"> 
+                <label>GST(%)</label>
+                <input type='text' name='gst' id='gst'
+                placeholder='gst' value={gst} 
+                onChange={(e)=>{setGst(e.target.value)}}/>
+            </div>
+
+            {/* added */}
+
+            {/* { subtracted } */}
+
+            <div className="flex flex-col"> 
+                <label>Offer(%)</label>
+                <input type='text' name='offer' id='offer'
+                placeholder='offer' value={offer} 
+                onChange={(e)=>{setOffer(e.target.value)}}/>
+            </div>
+        
+            {/* { subtracted } */}
+
           <div className="flex flex-col">
             <label htmlFor="amount">
               <h4>Amount</h4>
@@ -145,6 +175,8 @@ export default function TableForm({
             <td className="font-bold">Description</td>
             <td className="font-bold">Quantity</td>
             <td className="font-bold">Price</td>
+            <td className="font-bold">GST(%)</td>
+            <td className="font-bold">Offer(%)</td>
             <td className="font-bold">Amount</td>
             <td className="font-bold">Edit</td>
             <td className="font-bold">Delete</td>
@@ -157,6 +189,8 @@ export default function TableForm({
                 <td>{description}</td>
                 <td>{quantity}</td>
                 <td>{price}</td>
+                <td>{gst}</td>
+                <td>{offer}</td>
                 <td className="amount">{amount}</td>
                 <td>
                   <button onClick={() => editRow(id)}>

@@ -1,0 +1,57 @@
+{
+  "invoice": [
+    {
+      "invoice_number": "23214",
+      "clientName": "412412",
+      "order": [
+        {
+          "id": "11f99c99-19a2-4d46-856f-3a9f81775b79",
+          "description": "test5",
+          "quantity": "5",
+          "price": "100",
+          "amount": 525
+        }
+      ],
+      "id": 1
+    },
+    {
+      "invoice_id": "2321",
+      "customer": "56464",
+      "gross_cost": 0,
+      "tax_amount": 0,
+      "discount": "10",
+      "net_amount": 0,
+      "payment_mode": "cash",
+      "transction_id": 11122,
+      "invoice_date": "2022-09-28",
+      "total_amount": 5400,
+      "id": 2
+    },
+    {
+      "invoice_id": "2321",
+      "customer": "56464",
+      "gross_cost": 0,
+      "tax_amount": 0,
+      "discount": "10",
+      "net_amount": 0,
+      "payment_mode": "cash",
+      "transction_id": 11122,
+      "invoice_date": "2022-09-28",
+      "total_amount": 5400,
+      "id": 3
+    },
+    {
+      "invoice_id": "2321",
+      "customer": "56464",
+      "gross_cost": 0,
+      "tax_amount": 0,
+      "discount": "10",
+      "net_amount": 0,
+      "payment_mode": "cash",
+      "transction_id": 11122,
+      "invoice_date": "2022-09-28",
+      "total_amount": 5400,
+      "id": 4
+    }
+  ]
+}
