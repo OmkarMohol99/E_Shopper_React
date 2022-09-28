@@ -11,356 +11,224 @@ import ReactToPrint from "react-to-print";
 import ClientDetails from "./ClientDetails";
 import axios from "axios";
 
-const baseURL = "http://127.0.0.1:8088/invoice"
+import { id } from "date-fns/locale";
 
 
-function Invoice() {
-  // const [name, setName] = useState("")
-  // const [address, setAddress] = useState("")
-  // const [email, setEmail] = useState("")
-  // const [phone, setPhone] = useState("")
-  // const [bankName, setBankName] = useState("")
-  // const [bankAccount, setBankAccount] = useState("")
-  // const [website, setWebsite] = useState("")
-  const [clientId, setClientName] = useState("");
-  const [gross_cost, setGrossCost] = useState("");
-  const [invoiceNumber, setInvoiceNumber] = useState("");
-  const [invoiceDate, setInvoiceDate] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [notes, setNotes] = useState("");
-  const [description, setDescription] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [price, setPrice] = useState("");
-  const [amount, setAmount] = useState("");
-  const [list, setList] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [gst, setGst] = useState(0); //added
-  const [offer, setOffer] = useState(0);
-  const [width] = useState(641);
-  
+// const baseURL = "http://127.0.0.1:8088/invoice"
+
+// const url1 = "http://127.0.0.1:8000/api/invoice2/" 
 
 
-  const componentRef = useRef();
+const baseURL = "http://127.0.0.1:8000/api/invoice2/"
 
-  const handlePrint = () => {
-    window.print();
-  };
+const baseURL1 = "http://127.0.0.1:8000/api/products/"
+
+const baseURL2 = "http://127.0.0.1:8000/api/customer/"
+
+function Invoice() { 
+var curr = new Date();
+curr.setDate(curr.getDate());
+var date = curr.toISOString().substring(0,10);
+ const [showInvoice, setShowInvoice] = useState(false);
+//  const [name, setName] = useState('');
+//  const [address, setAddress] = useState('');
+//  const [email, setEmail] = useState('');
+//  const [phone, setPhone] = useState('');
+//  const [website, setWebsite] = useState('');
+//  const [bankName, setBankName] = useState('');
+//  const [bankAccount, setBankAccount] = useState('');
+ const [clientName, setClientName] = useState('');
+ const [clientAddress, setClientAddess] = useState('');
+ const [invoiceNumber, setInvoiceNumber] = useState('');
+ const [invoiceDate, setInvoiceDate] = useState(date);
+ const [dueDate, setDueDate] = useState(date);
+ const [description, setDescription] = useState('');
+ const [quantity, setQuantity] = useState('');
+ const [price, setPrice] = useState('');
+ const [amount, setAmount] = useState('');
+ const[list, setList] = useState([]);
+ const [total, setTotal] = useState(0);
+ const [gst, setGst] = useState(0); //added
+ const [offer, setOffer] = useState(0);
+ const [clientId, setClientId] =useState('')
+
+ const componentRef = useRef()
+
+
+  const handleSubmit = () => {
+    window.print()
+  }
 
   async function createPost () {
     let result = await axios.post(baseURL, {
-      invoice_id : invoiceNumber,
-      customer: clientId,
-      gross_cost: 0,
-      tax_amount: 0,
-      discount: offer,
-      net_amount:0,
-      payment_mode:"cash",
-      transction_id:11122,
-      invoice_date:invoiceDate,
-      total_amount:total, 
+      invoice_id: +invoiceNumber,
+      gross_cost: 6786734.0,
+      tax_amount: 0.0,
+      net_amount: total,
+      payment_mode: "cash",
+      transaction_id: null,
+      invoice_date: invoiceDate,
+      customer: 32,
     })
     console.log(result)
   }
-   
+  // c_id: 32, c_name: 'ABC', 
+  const clientdetailsHandler = async (event) => {
+    let result = await axios.get(baseURL2)
+  //   console.log(result.data)
+  // console.log(event.target.value, typeof(event.target.value))
+  const index = (result.data.findIndex((element)=> element.c_id === +event.target.value ))
+  
+  if ((index) === -1){
+     setClientName('')
+     setClientAddess('')
+      
+  }
+  console.log(result.data)
+  setClientName(result.data[index].c_name)
+  setClientAddess(result.data[index].c_address)
+  }
+
+  // const productdetailsHandler = async () => {
+  //   let result = await axios.get(baseURL1)
+  //   console.log(result.data)
+  // }
 
 
-  useEffect(() => {
-    if (window.innerWidth < width) {
-      alert("Place your phone in landscape mode for the best experience");
-    }
-  }, [width]);
+
 
   return (
     <>
-      {/* <div className="container">
-        <p className="text-white font-bold uppercase tracking-widest">Beta</p>
-      </div> */}
-      <main className="container">
-        <section>
-          <h2 className="text-primary">Customer Invoice:</h2>
-          <div className="bg-white p-5 rounded shadow ">
-            {/* name, address, email, phone, bank name, bank account number, website client name, client address, invoice number, invoice date, due date, notes */}
-            <div className="container">
-              {/* <article className="md:grid grid-cols-2 gap-10"> */}
-              {/* <div className="flex flex-col">
-                  <label htmlFor="name">Your full name</label>
-                  <input className='form-control'
-                    type="text"
-                    name="text"
-                    id="name"
-                    placeholder="Enter your name"
-                    autoComplete="off"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </div>
+      <main className='p-5 p-5 md:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl bg-white rounded shandow'>
+        <h1 className='font-bold text-xl uppercase md:text-4xl my-5'><u>E-Shopper</u></h1>
+        {showInvoice &&
+        <>
+        <ReactToPrint trigger={()=> <button  className='bg-blue-500 text-white font-bold py-2 px-8 rounded shadow
+                        border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 
+                        transition-all duration-300 mb-5'>Print</button>}
+        content={() => componentRef.current} />
+        <button onClick={()=>{
+      
+          setList([])
+          setTotal("")
+          setShowInvoice(false)
+          
+    
+        }}
+                        className='bg-gray-500 text-gray font-bold mx-10 py-2 px-8 rounded shadow
+                        border-2 border-gray-500 hover:bg-transparent hover:text-gray-500 
+                        transition-all duration-300'>New Invoice 
+                        </button>
+                        <button onClick={createPost}>SAVE</button> 
+                    </>}
+        {showInvoice ? (
+        <>
+          <div ref={componentRef} className='p-5'>
+        <Header hanldePrint={handleSubmit} />
+        <MainDetails  />
+        <ClientDetails  etails clientName={clientName} clientAddress={clientAddress} />
+        <Dates invoiceNumber={invoiceNumber} invoiceDate={invoiceDate} dueDate={dueDate} />
+        <Table description={description} 
+        quantity={quantity} 
+        price={price}
+        amount={amount}
+        total={total}
+        setTotal={setTotal}
+        list={list}
+        setList={setList} />
+        <Notes />
+        <Footer  />
+        
+        </div>
+        <button onClick={()=> setShowInvoice(false)} 
+        className='bg-blue-500 text-white
+        font-bold py-2 px-8 rounded shadow
+        border-2 border-blue-500
+        hover:bg-transparent hover:text-blue-500
+        transition-all duration-300'>Edit information</button>
+        </>) : (
+          <>
+            <div className='flex flex-col justify-center'>
 
-                <div className="flex flex-col">
-                  <label htmlFor="address">Enter your address</label>
-                  <input
-                    type="text"
-                    name="address"
-                    id="address"
-                    placeholder="Enter your address"
-                    autoComplete="off"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                  />
-                </div>
-              </article> */}
+            <label htmlFor='clientId'>Client Id</label>
+              <input type='number' name='clientId' id='clientId'
+              placeholder='Client Id'
+              autoComplete='off'
+              onChange={clientdetailsHandler}
+              />
 
-              {/* <article className="md:grid grid-cols-3 gap-10">
-                <div className="flex flex-col">
-                  <label htmlFor="email">Enter your email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    placeholder="Enter your email"
-                    autoComplete="off"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
+              <label htmlFor='clientName'>Enter Your Client Name</label>
+              <input type='text' name='clientName' id='clientName'
+              placeholder='Enter your Bank Client Name'
+              autoComplete='off' 
+              value={clientName}
+              />
 
-                <div className="flex flex-col">
-                  <label htmlFor="website">Enter your website</label>
-                  <input
-                    type="url"
-                    name="website"
-                    id="website"
-                    placeholder="Enter your website"
-                    autoComplete="off"
-                    value={website}
-                    onChange={(e) => setWebsite(e.target.value)}
-                  />
-                </div>
+              <label htmlFor='clientAddress'>Enter Your Client Address</label>
+              <input type='text' name='clientAddress' id='clientAddress' 
+              placeholder='Enter your Bank Client Address'
+              autoComplete='off' 
+              value={clientAddress}
+              />
 
-                <div className="flex flex-col">
-                  <label htmlFor="phone">Enter your phone</label>
-                  <input
-                    type="text"
-                    name="phone"
-                    id="phone"
-                    placeholder="Enter your phone"
-                    autoComplete="off"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                  />
-                </div>
-              </article>
+              <label htmlFor='invoiceNumber'>Enter Your Invoice Number</label>
+              <input type='text' name='invoiceNumber' id='invoiceNumber'
+              placeholder='Enter your Bank Invoice Number'
+              autoComplete='off' 
+              value={invoiceNumber}
+              onChange={(e)=>setInvoiceNumber(e.target.value)}/>
 
-              <article className="md:grid grid-cols-2 gap-10">
-                <div className="flex flex-col">
-                  <label htmlFor="bankName">Enter your bank name</label>
-                  <input
-                    type="text"
-                    name="bankName"
-                    id="bankName"
-                    placeholder="Enter your bank name"
-                    autoComplete="off"
-                    value={bankName}
-                    onChange={(e) => setBankName(e.target.value)}
-                  />
-                </div>
+              
 
-                <div className="flex flex-col">
-                  <label htmlFor="bankAccount">
-                    Enter your bank account number
-                  </label>
-                  <input
-                    type="text"
-                    name="bankAccount"
-                    id="bankAccount"
-                    placeholder="Enter your bank account number"
-                    autoComplete="off"
-                    value={bankAccount}
-                    onChange={(e) => setBankAccount(e.target.value)}
-                  />
-                </div>
-              </article> */}
+              <label htmlFor='invoiceDate'>Enter Your Invoice Date</label>
+              <input type='date' name='invoiceDate' id='invoiceDate'
+              placeholder='Enter your invoice Date'
+              autoComplete='off' 
+              value={invoiceDate}
+              onChange={(e)=>setInvoiceDate(e.target.value)}/>
 
-              <article className="md:grid grid-cols-2 gap-10 md:mt-16">
-                <div className="flex flex-col">
-                  <label htmlFor="invoice_id">Invoice Number:</label>
-                  <input
-                    className="form-control"
-                    type="number"
-                    name="invoice_id"
-                    id="invoice_id"
-                    placeholder="Invoice ID"
-                    autoComplete="off"
-                    value={invoiceNumber}
-                    onChange={(e) => setInvoiceNumber(e.target.value)}
-                  />
-                </div>
-                <br></br>
-                <div className="flex flex-col">
-                  <label htmlFor="customer">Customer</label>
-                  <input
-                    className="form-control"
-                    type="number"
-                    name="customer"
-                    id="customer"
-                    placeholder="Customer ID"
-                    autoComplete="off"
-                    value={clientId}
-                    onChange={(e) => setClientName(e.target.value)}
-                  />
-                </div>
-                <br></br>
-                <div className="flex flex-col">
-                  <label htmlFor="gross_cost">Gross Cost</label> 
-                  <input
-                    className="form-control"
-                    type="number"
-                    name="gross_cost"
-                    id="gross_cost"
-                    value={gross_cost}
-                    onChange={(e) => setGrossCost(e.target.value)}
-                  />
-                </div>
-              </article>
-              <br></br>
+              <label htmlFor='dueDate'>Enter Due Date</label>
+              <input type='date' name='dueDate' id='dueDate'
+              placeholder='Enter your Due date'
+              autoComplete='off' 
+              value={dueDate}
+              onChange={(e)=>setDueDate(e.target.value)}/>
 
-              <article className="md:grid grid-cols-3 gap-10">
-                {/* <br></br> */}
-                <div className="flex flex-col">
-                  <label htmlFor="invoiceDate">Invoice Date:</label>
-                  <input
-                    className="form-control"
-                    type="date"
-                    name="invoiceDate"
-                    id="invoiceDate"
-                    placeholder="Invoice Date"
-                    autoComplete="off"
-                    value={invoiceDate}
-                    onChange={(e) => setInvoiceDate(e.target.value)}
-                  />
-                </div>
-                <br></br>
-                <div className="flex flex-col">
-                  <label htmlFor="dueDate">Due Date:</label>
-                  <input
-                    className="form-control"
-                    type="date"
-                    name="dueDate"
-                    id="dueDate"
-                    placeholder="Invoice Date"
-                    autoComplete="off"
-                    value={dueDate}
-                    onChange={(e) => setDueDate(e.target.value)}
-                  />
-                </div>
-              </article>
-              <br></br>
-              {/* This is our table form */}
               <article>
-                <TableForm
-                  description={description}
-                  setDescription={setDescription}
-                  quantity={quantity}
-                  setQuantity={setQuantity}
-                  price={price}
-                  setPrice={setPrice}
-                  amount={amount}
-                  setAmount={setAmount}
-                  list={list}
-                  setList={setList}
-                  total={total}
-                  setTotal={setTotal}
-                    //added
-                  gst={gst}
-                  setGst={setGst}
-                  offer={offer}
-                  setOffer={setOffer}
-                   //added
+                <TableForm description={description} setDescription={setDescription}
+                quantity={quantity} setQuantity={setQuantity}
+                price={price} setPrice={setPrice}
+                amount={amount} setAmount={setAmount}
+                list={list}
+                setList={setList}
+                total={total}
+                setTotal={setTotal}
+                //added
+                gst={gst}
+                setGst={setGst}
+                offer={offer}
+                setOffer={setOffer}
+                baseURL1={baseURL1}
+                //added
                 />
               </article>
 
-              {/* <label htmlFor="notes">Additional Notes</label> */}
-              <textarea
-                name="notes"
-                id="notes"
-                cols="132"
-                rows="10"
-                placeholder="Additional notes to the client"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-              ></textarea>
-
-              {/* <button
-              onClick={() => setShowInvoice(true)}
-              className="bg-blue-500 text-white font-bold py-2 px-8 rounded shadow border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300"
-            >
-              Preview Invoice
-            </button> */}
-            </div>
-          </div>
-        </section>
-        <br></br>
-
-        {/* Invoice Preview */}
-
-        <div className="invoice__preview bg-white p-5 rounded">
-          <ReactToPrint
-            trigger={() => (
-              <button className="btn btn-outline-primary">
-                Print / Download
+              
+              <button onClick={()=> setShowInvoice(true)} 
+              className='mt-5 bg-blue-500 text-white
+              font-bold py-2 px-8 rounded shadow
+              border-2 border-blue-500
+              hover:bg-transparent hover:text-blue-500
+              transition-all duration-300'>
+                Preview Invoice
               </button>
-               
-              
-            )}
-            content={() => componentRef.current}
-          />
-          <button onClick={createPost}>SAVE</button> 
-          <div ref={componentRef} className="p-5">
-            <Header handlePrint={handlePrint} />
-
-            <MainDetails />
-
-            <ClientDetails
-              
-            />
-
-            <Dates
-              invoiceNumber={invoiceNumber}
-              invoiceDate={invoiceDate}
-              dueDate={dueDate}
-            />
-
-            <Table
-              description={description}
-              quantity={quantity}
-              price={price}
-              amount={amount}
-              list={list}
-              setList={setList}
-              total={total}
-              setTotal={setTotal}
-            />
-
-            <Notes notes={notes} />
-
-            <Footer
-            // name={name}
-            // address={address}
-            // website={website}
-            // email={email}
-            // phone={phone}
-            // bankAccount={bankAccount}
-            // bankName={bankName}
-            />
-          </div>
-          {/* <button
-            onClick={() => setShowInvoice(false)}
-            className="mt-5 bg-blue-500 text-white font-bold py-2 px-8 rounded shadow border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300"
-          >
-            Edit Information
-          </button> */}
-        </div>
+            </div>
+          </>
+        )}  
       </main>
     </>
   );
 }
+
 export default Invoice;
+
