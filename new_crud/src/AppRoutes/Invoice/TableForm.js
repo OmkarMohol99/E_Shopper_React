@@ -40,7 +40,7 @@ gst, setGst, offer, setOffer, baseURL1}) => {
         else {
             const newItems = {
                 id: Math.random().toString(),
-                description,
+                productdesc,
                 quantity,
                 price,
                 amount,
@@ -183,7 +183,7 @@ gst, setGst, offer, setOffer, baseURL1}) => {
                             <React.Fragment key={data.id}>
                                 <tbody>
                                     <tr>
-                                        <td>{data.description}</td>
+                                        <td>{data.productdesc}</td>
                                         <td>{data.quantity}</td>
                                         <td>{data.price}</td>
                                         <td>{data.gst}</td>

@@ -1,10 +1,15 @@
 import React, {Component} from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
-class LoginForm extends Component{
+const  LoginForm =()=> {
+   const navigate = useNavigate()
+   const navigateLink=()=>{
+    navigate("/Dashboard")
+   }
 
-    render(){
+
+        
         return (
             <div className="auth mx-auto">
                 <form className="">
@@ -20,7 +25,7 @@ class LoginForm extends Component{
                         <input type="password" className="form-control" id="username"/>
                     </div>
                     <div className="form-group">
-                        <button className="btn btn-primary w-100 mt-2">Login</button>
+                        <button className="btn btn-primary w-100 mt-2" onClick={navigateLink}>Login</button>
                     </div>
                     <div>
                         <p>Forgot password? <Link to="/reset">Click to Reset</Link></p>
@@ -32,6 +37,6 @@ class LoginForm extends Component{
             </div>
         )
     }
-}
+
 
 export default LoginForm;
