@@ -15,6 +15,9 @@ import DashboardPage from "../Shop/Dashboard";
 import RegistrationForm from "../auth/RegistrationForm";
 import LoginForm from "../auth/LoginForm";
 import PasswordResetForm from "../auth/PasswordResetForm";
+import Expenses from "../BalanceSheet/Expenses";
+import TransactionHistory from "../BalanceSheet/TransactionHistory";
+
 
 function App() {
   return (
@@ -157,6 +160,24 @@ function App() {
                 </NavDropdown>
               </li>
               <li className="nav-item">
+                <NavDropdown title="Balance Sheet">
+                  <NavDropdown.Item>
+                    <NavLink to="expenses" className="me-auto">
+                      Add Expenses
+                    </NavLink>
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item>
+                    <NavLink to="transactionhistory">Transaction History</NavLink>
+                  </NavDropdown.Item>
+                  {/* <NavDropdown.Divider />
+                  <NavDropdown.Item>
+                    <NavLink to="showexpenses">Show Expenses</NavLink>
+                  </NavDropdown.Item> */}
+                </NavDropdown>
+                
+              </li>
+              <li className="nav-item">
                 <NavDropdown title="Report">
                   <NavDropdown.Item>
                     <NavLink to="report" className="me-auto">
@@ -189,6 +210,8 @@ function App() {
         <Route path="/contact" element={<Contact />}></Route>
         <Route path="/inventory" element={<Inventory />}></Route>
         <Route path="/vendor" element={<Vendor />}></Route>
+        <Route path="/expenses" element={<Expenses />}></Route>
+        <Route path="/transactionhistory" element={<TransactionHistory />}></Route>
         <Route path="/report" element={<Report />}></Route>
         <Route path="/" element={<Home />}></Route>
         <Route path="*" element={<ErrorPage />}></Route>
