@@ -7,6 +7,7 @@ import "../node_modules/bootstrap/dist/js/bootstrap.js";
 import App from "./AppRoutes/App";
 
 
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <>

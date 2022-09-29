@@ -1,4 +1,4 @@
-// import axios from "axios"
+import axios from "axios"
 
 // const url1 = "http://127.0.0.1:8000/api/invoice1/"   // to get all data of customer order
 
@@ -18,3 +18,12 @@
 //     return axios.post(url3+userData)
 // }
 
+const expense_url = "http://127.0.0.1:8000/expense_app/expense/"
+
+export const getDataInBalancesheet = () =>{
+    return axios.get(expense_url)
+}
+
+export const postDataInbackend=(userObj)=>{
+    return axios.post(expense_url, userObj)
+}

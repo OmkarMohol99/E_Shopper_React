@@ -128,7 +128,8 @@ var date = curr.toISOString().substring(0,10);
         <MainDetails  />
         <ClientDetails  etails clientName={clientName} clientAddress={clientAddress} />
         <Dates invoiceNumber={invoiceNumber} invoiceDate={invoiceDate} dueDate={dueDate} />
-        <Table description={description} 
+        <Table 
+        description={description} 
         quantity={quantity} 
         price={price}
         amount={amount}

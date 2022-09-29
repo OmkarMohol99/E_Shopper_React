@@ -109,9 +109,9 @@ gst, setGst, offer, setOffer, baseURL1}) => {
         <>
             <form onSubmit={handleSubmit}>
             <div className="flex flex-col">
-                <label>Item Description</label>
+                <label>Product Id</label>
                 <input type='number' name='description' id='description'
-                placeholder='Item Description' onChange={productdetailsHandler} 
+                placeholder='product id' onChange={productdetailsHandler} 
                 />
             </div>
             <div className="md:grid grid-cols-3 gap-10">
@@ -138,14 +138,14 @@ gst, setGst, offer, setOffer, baseURL1}) => {
             {/*added*/}
 
             <div className="flex flex-col"> 
-                <label>GST</label>
+                <label>GST(%)</label>
                 <input type='text' name='gst' id='gst'
                 placeholder='gst' value={gst} 
                 onChange={(e)=>{setGst(e.target.value)}}/>
             </div>
 
             <div className="flex flex-col"> 
-                <label>Offer</label>
+                <label>Offer(%)</label>
                 <input type='number' name='offer' id='offer'
                 placeholder='offer' value={offer} 
                 onChange={(e)=>{setOffer(e.target.value)}}/>
