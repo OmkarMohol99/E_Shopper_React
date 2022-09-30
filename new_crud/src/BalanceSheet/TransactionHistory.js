@@ -30,7 +30,7 @@ const TransactionHistory = () => {
     <>
       <h1 className="text-primary"><center>Expenses Information</center></h1>
       <div className="container">
-        <table className="table table-dark">
+        <table className="table table-light">
           <thead>
             <tr>
               <th scope="col">BalanceSheet ID</th>
