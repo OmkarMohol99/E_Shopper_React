@@ -19,6 +19,7 @@ import Expenses from "../BalanceSheet/Expenses";
 import TransactionHistory from "../BalanceSheet/TransactionHistory";
 
 
+
 function App() {
   return (
     <>
@@ -199,7 +200,7 @@ function App() {
         </div>
       </nav>
       <Routes>
-        <Route path="/dashboard" element={<DashboardPage />}></Route>
+        <Route path="/dashboard" element={<DashboardPage />} ></Route>
         <Route path="/register" element={<RegistrationForm />}></Route>
         <Route path="/reset" element={<PasswordResetForm />}></Route>
         <Route path="/login" element={<LoginForm />}></Route>
@@ -221,3 +222,7 @@ function App() {
 }
 
 export default App;
+
+
+
+//session storage?

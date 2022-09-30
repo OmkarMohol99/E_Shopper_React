@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 // import { registerUser } from "../Database/DBService";
 import Calcomp from "../AppRoutes/calendar/CalComp";
-// import { postDataInbackend } from "../AppRoutes/Database/DBServices";
+import { postDataInbackend } from "../AppRoutes/Database/DBServices";
 
 function Expenses() {
  
@@ -11,10 +11,11 @@ function Expenses() {
   const { register, handleSubmit, reset } = useForm();
   // const [invoiceDate, setInvoiceDate] = useState();
 
-  // const getDataInConsole=(userObject)=>{
-  //   console.log(userObject)
-  //   postDataInbackend(userObject)
-  // }
+  const getDataInConsole=(userObject)=>{
+    console.log(userObject)
+    postDataInbackend(userObject)
+    reset()
+  }
   // console.log({ data });
 
   // const getRegisterUser = (userObj) => {
@@ -24,10 +25,10 @@ function Expenses() {
      
   // const [selectedDate, setSelectedDate] = useState(null)
 
-  const getDataInConsole = async(data) => {
-    console.log("submit called",data);
-    return await axios.post("http://127.0.0.1:8000/expense_app/expense/", data).then(() => {});
-  };
+  // const getDataInConsole = async(data) => {
+  //   console.log("submit called",data);
+  //   return await axios.post("http://127.0.0.1:8000/expense_app/expense/", data).then(() => {});
+  // };
 
  
   // useEffect(()=>{
